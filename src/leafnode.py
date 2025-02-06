@@ -3,6 +3,8 @@ from htmlnode import *
 class LeafNode(HTMLNode):
 
     def __init__(self, tag, value, props=None):
+        if value == None:
+            raise ValueError("LeafNode must have a value")
         super().__init__(tag, value, None, props)
 
     def to_html(self):

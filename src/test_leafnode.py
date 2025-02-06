@@ -22,10 +22,10 @@ class TestLeafNode(unittest.TestCase):
         self.assertIsNone(node.children)
 
     def test_no_value_detected(self):
+        print("testing LeafNode no value given exception")
         with self.assertRaises(ValueError):
             node = LeafNode("p", None, {"href": "localhost:8080"})
-            print("testing LeafNode no value given exception")
-            node.to_html()
+            
 
 
 if __name__ == "__main__":
