@@ -22,24 +22,38 @@ def main():
     parent_node = ParentNode(
         "p",
         [
-            LeafNode("b", "Bold text"),
-            LeafNode(None, "Normal text"),
-            LeafNode("i", "italic text"),
-            LeafNode(None, "Normal text"),
+            LeafNode("Bold text", "b"),
+            LeafNode("Normal text", ""),
+            LeafNode("italic text", "i"),
+            LeafNode("Normal text", ""),
         ],
     )
     parent_node2 = ParentNode(
         "p",
         [
             parent_node,
-            LeafNode("p", "Bold text2"),
-            LeafNode(None, "Normal text2"),
-            LeafNode("i", "italic text2"),
-            LeafNode(None, "Normal text2"),
+            LeafNode("Bold text2", "b"),
+            LeafNode("Normal text2", ""),
+            LeafNode("italic text2", "i"),
+            LeafNode("Normal text2", ""),
         ],
     )
     print(parent_node)
     print(parent_node.to_html())
     print(parent_node2.to_html())
+    text_to_html_node = TextNode("This is a text node", TextType.TEXT, "https://www.boot.dev")
+    text_to_html_node2 = TextNode("This is a text node2", TextType.BOLD, "https://www.boot.dev")
+    text_to_html_node3 = TextNode("This is a text node3", TextType.ITALIC, "https://www.boot.dev")
+    text_to_html_node4 = TextNode("This is a text node4", TextType.CODE, "https://www.boot.dev")
+    text_to_html_node5 = TextNode("This is a text node5", TextType.LINK, "https://www.boot.dev")
+    text_to_html_node6 = TextNode("This is a text node6", TextType.IMAGE, "https://www.boot.dev")
+    print(TextNode.text_node_to_html_node(text_to_html_node).to_html())
+    print(TextNode.text_node_to_html_node(text_to_html_node2).to_html())
+    print(TextNode.text_node_to_html_node(text_to_html_node3).to_html())
+    print(TextNode.text_node_to_html_node(text_to_html_node4).to_html())
+    print(TextNode.text_node_to_html_node(text_to_html_node5).to_html())
+    print(TextNode.text_node_to_html_node(text_to_html_node6).to_html())
+    
+
 
 main()

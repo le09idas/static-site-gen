@@ -24,7 +24,7 @@ class TestLeafNode(unittest.TestCase):
     def test_no_value_detected(self):
         print("testing LeafNode no value given exception")
         with self.assertRaises(ValueError):
-            node = LeafNode("p", None, {"href": "localhost:8080"})
+            node = LeafNode(None, "p", {"href": "localhost:8080"})
             
 
 

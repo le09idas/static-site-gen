@@ -10,19 +10,19 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode(
             "p",
             [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "b"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text"),
             ],
         )
         node2 = ParentNode(
             "p",
             [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "b"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text"),
             ],
         )
         print("testing ParentNode equality")
@@ -32,19 +32,19 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode(
             "p",
             [
-                LeafNode("p", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "p"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
             ],
         )
         node2 = ParentNode(
             "p",
             [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "b"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
             ],
         )
         print("testing ParentNode inequality")
@@ -54,10 +54,10 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode(
             "p",
             [
-                LeafNode("p", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "p"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
             ]
         )
         print("testing ParentNode value attribute is None")
@@ -69,10 +69,10 @@ class TestParentNode(unittest.TestCase):
             node = ParentNode(
                 None,
                 [
-                    LeafNode("p", "Bold text"),
-                    LeafNode(None, "Normal text"),
-                    LeafNode("i", "italic text"),
-                    LeafNode(None, "Normal text"),
+                    LeafNode("Bold text", "p"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
                 ],
             )
             
@@ -82,7 +82,7 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             node = ParentNode(
                 "p",
-                None,
+                None
             )
             
 
@@ -91,7 +91,7 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             node = ParentNode(
                 "p",
-                [],
+                []
             )
             
     
@@ -99,10 +99,10 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode(
             "p",
             [
-                LeafNode("p", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
+                LeafNode("Bold text", "p"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
             ]
         )
         print("testing ParentNode multiple children test")
@@ -112,23 +112,23 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode(
             "p",
             [
-                LeafNode("p", "Bold text1"),
-                LeafNode(None, "Normal text1"),
-                LeafNode("i", "italic text1"),
-                LeafNode(None, "Normal text1"),
+                LeafNode("Bold text", "p"),
+                LeafNode("Normal text"),
+                LeafNode("italic text", "i"),
+                LeafNode("Normal text")
             ],
         )
         node2 = ParentNode(
             "p",
             [
                 node,
-                LeafNode("p", "Bold text2"),
-                LeafNode(None, "Normal text2"),
-                LeafNode("i", "italic text2"),
-                LeafNode(None, "Normal text2"),
+                LeafNode("Bold text2", "p"),
+                LeafNode("Normal text2"),
+                LeafNode("italic text2", "i"),
+                LeafNode("Normal text2")
             ],
         )
-        print("testing ParentNode nested parents")
+        print("testing ParentNode nested")
         self.assertTrue(type(node2) == type(node2.children[0]))
 
 

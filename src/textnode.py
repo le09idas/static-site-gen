@@ -1,8 +1,10 @@
 from enum import Enum
+from leafnode import LeafNode
+from htmlnode import HTMLNode
 
 class TextType(Enum):
     
-    NORMAL = "normal"
+    TEXT = "normal"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
@@ -27,3 +29,24 @@ class TextNode:
     
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+
+    def text_node_to_html_node(text_node):
+        if text_node.text_type not in TextType:
+            raise TypeError("TextNode needs a text_type to become HTMLNode")
+        match (text_node.text_type):
+            case (TextType.TEXT):
+                html_node = LeafNode(text_node.text)
+            case (TextType.BOLD):
+                html_node = LeafNode(text_node.text,"b")
+            case (TextType.ITALIC):
+                html_node = LeafNode(text_node.text, "i")
+            case (TextType.CODE):
+                html_node = LeafNode(text_node.text, "code")
+            case (TextType.LINK):
+                props = {"href": text_node.url}
+                html_node = LeafNode(text_node.text, "a", props)
+            case (TextType.IMAGE):
+                props = {"href": text_node.url,
+                         "alt": text_node.text}
+                html_node = LeafNode("", "img", props)
+        return html_node

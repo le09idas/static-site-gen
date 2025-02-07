@@ -17,7 +17,7 @@ class TestTextNode(unittest.TestCase):
         self.assertNotEqual(node, node2)
 
     def test_url_is_none(self):
-        node = TextNode("This has no url", TextType.NORMAL)
+        node = TextNode("This has no url", TextType.TEXT)
         print("testing textnode if url is None")
         self.assertIsNone(node.url)
     
@@ -33,6 +33,47 @@ class TestTextNode(unittest.TestCase):
         print("testing textnode difference in TextNode attributes")
         if node.url != node2.url:
             self.assertNotEqual(node, node2)
+
+    def test_text_t2html_func(self):
+        node = TextNode("This is a text node", TextType.TEXT)
+        leaf = node.text_node_to_html_node()
+        print("testing text to html")
+        self.assertTrue(leaf.tag == None and leaf.children == None and leaf.props == None)
+
+    def test_bold_t2html_func(self):
+        node = TextNode("This is a text node", TextType.BOLD)
+        leaf = node.text_node_to_html_node()
+        print("testing bold to html")
+        self.assertTrue(leaf.tag == "b" and leaf.children == None)
+
+    def test_italic_t2html_func(self):
+        node = TextNode("This is a text node", TextType.ITALIC)
+        leaf = node.text_node_to_html_node()
+        print("testing italic to html")
+        self.assertTrue(leaf.tag == "i" and leaf.children == None)
+
+    def test_code_t2html_func(self):
+        node = TextNode("This is a text node", TextType.CODE)
+        leaf = node.text_node_to_html_node()
+        print("testing code to html")
+        self.assertTrue(leaf.tag == "code" and leaf.children == None)
+
+    def test_link_t2html_func(self):
+        node = TextNode("This is a text node", TextType.LINK)
+        leaf = node.text_node_to_html_node()
+        print("testing link to html")
+        self.assertTrue(leaf.tag == "a" and 
+                         leaf.children == None and 
+                         "href" in leaf.props.keys())
+
+    def test_image_t2html_func(self):
+        node = TextNode("This is a text node", TextType.IMAGE)
+        leaf = node.text_node_to_html_node()
+        print("testing image to html")
+        self.assertTrue(leaf.tag == "img" and 
+                         leaf.children == None and 
+                         "href" in leaf.props.keys() and
+                         leaf.value == "")
 
 if __name__ == "__main__":
     unittest.main()
