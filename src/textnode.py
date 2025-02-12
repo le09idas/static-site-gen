@@ -4,7 +4,7 @@ from htmlnode import HTMLNode
 
 class TextType(Enum):
     
-    TEXT = "normal"
+    TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
