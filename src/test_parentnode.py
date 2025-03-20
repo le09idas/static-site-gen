@@ -27,6 +27,7 @@ class TestParentNode(unittest.TestCase):
         )
         print("testing ParentNode equality")
         self.assertEqual(node, node2)
+        print("")
 
     def test_not_eq(self):
         node = ParentNode(
@@ -49,6 +50,7 @@ class TestParentNode(unittest.TestCase):
         )
         print("testing ParentNode inequality")
         self.assertNotEqual(node, node2)
+        print("")
 
     def test_attribute_is_none(self):
         node = ParentNode(
@@ -62,6 +64,7 @@ class TestParentNode(unittest.TestCase):
         )
         print("testing ParentNode value attribute is None")
         self.assertIsNone(node.value)
+        print("")
 
     def test_no_tag_detected(self):
         print("testing ParentNode no tag given exception")
@@ -75,6 +78,7 @@ class TestParentNode(unittest.TestCase):
                 LeafNode("Normal text")
                 ],
             )
+        print("")
             
     
     def test_no_children_detected_none(self):
@@ -84,7 +88,7 @@ class TestParentNode(unittest.TestCase):
                 "p",
                 None
             )
-            
+        print("")   
 
     def test_no_children_detected_empty(self):
         print("testing ParentNode no children empty list given exception")
@@ -93,7 +97,7 @@ class TestParentNode(unittest.TestCase):
                 "p",
                 []
             )
-            
+        print("")    
     
     def test_multiple_children(self):
         node = ParentNode(
@@ -107,6 +111,7 @@ class TestParentNode(unittest.TestCase):
         )
         print("testing ParentNode multiple children test")
         self.assertTrue(len(node.children) > 1)
+        print("")
 
     def test_nested_parents(self):
         node = ParentNode(
@@ -130,7 +135,7 @@ class TestParentNode(unittest.TestCase):
         )
         print("testing ParentNode nested")
         self.assertTrue(type(node2) == type(node2.children[0]))
-
+        print("")
 
 if __name__ == "__main__":
     unittest.main()
