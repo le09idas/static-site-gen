@@ -5,7 +5,7 @@ from htmlnode import HTMLNode
 from node_functions import NodeFunc
 
 
-class TestHTMLNode(unittest.TestCase):
+class TestNodeFunctions(unittest.TestCase):
         
     def test_base_bold_case(self):
         node_base_bold_case = TextNode(
@@ -22,12 +22,12 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_node_base_italic_case(self):
         node_base_italic_case = TextNode(
-            "This is text with a *italic phrase* in the middle", 
+            "This is text with a _italic phrase_ in the middle", 
             TextType.TEXT
         )
         print(node_base_italic_case)
         node_base_italic_case_delimited = NodeFunc.split_nodes_delimiter(
-            [node_base_italic_case], "*", TextType.ITALIC
+            [node_base_italic_case], "_", TextType.ITALIC
         )
         print(node_base_italic_case_delimited)
         print("")
@@ -48,7 +48,7 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_node_comingled_case1(self):
         node_comingled_case1 = TextNode(
-        "This text has **comingled** *text*!",
+        "This text has **comingled** _text_!",
             TextType.TEXT
         )
         print(node_comingled_case1)
@@ -61,12 +61,12 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_node_italic_delimited_first(self):
         node_italic_delimited_first = TextNode(
-        "This text has *comingled* **text**!",
+        "This text has _comingled_ **text**!",
             TextType.TEXT
         )
         print(node_italic_delimited_first)
         node_italic_delimited_first_delimited = NodeFunc.split_nodes_delimiter(
-            [node_italic_delimited_first], "*", TextType.ITALIC
+            [node_italic_delimited_first], "_", TextType.ITALIC
         )
         print(node_italic_delimited_first_delimited)
         print("")
@@ -86,13 +86,13 @@ class TestHTMLNode(unittest.TestCase):
     
     def test_node_no_terminating_italic_delimiter(self):
         node_no_terminating_italic_delimiter = TextNode(
-            "This text has a missing *italic delimiter terminator",
+            "This text has a missing _italic delimiter terminator",
             TextType.TEXT
         )
         print(node_no_terminating_italic_delimiter)
         with self.assertRaises(Exception):
             node_no_terminating_italic_delimiter_delimited = NodeFunc.split_nodes_delimiter(
-                [node_no_terminating_italic_delimiter], "*", TextType.ITALIC
+                [node_no_terminating_italic_delimiter], "_", TextType.ITALIC
             )
         print("")
 
@@ -110,27 +110,27 @@ class TestHTMLNode(unittest.TestCase):
     
     def test_node_starting_delimiter(self):
         node_starting_delimiter = TextNode(
-            "*This* text starts with a delimiter",
+            "_This_ text starts with a delimiter",
             TextType.TEXT
         )
         print(node_starting_delimiter)
         node_starting_delimiter_delimited = NodeFunc.split_nodes_delimiter(
-            [node_starting_delimiter], "*", TextType.ITALIC
+            [node_starting_delimiter], "_", TextType.ITALIC
         )
-        self.assertTrue(node_starting_delimiter_delimited[1].text_type == TextType.ITALIC)
+        self.assertTrue(node_starting_delimiter_delimited[0].text_type == TextType.ITALIC)
         print(node_starting_delimiter_delimited)
         print("")
     
     def test_node_ending_delimiter(self):
         node_ending_delimiter = TextNode(
-                "This text ends with a *delimiter*",
+                "This text ends with _delimiter_",
                 TextType.TEXT
             )
         print(node_ending_delimiter)
         node_ending_delimiter_delimited = NodeFunc.split_nodes_delimiter(
-            [node_ending_delimiter], "*", TextType.ITALIC
+            [node_ending_delimiter], "_", TextType.ITALIC
         )
-        self.assertTrue(node_ending_delimiter_delimited[-2].text_type == TextType.ITALIC)
+        self.assertTrue(node_ending_delimiter_delimited[-1].text_type == TextType.ITALIC)
         print(node_ending_delimiter_delimited)
         print("")
 
@@ -236,6 +236,80 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(new_nodes4[0], TextNode("This is text with a link ![to boot dev](https://www.boot.dev) and ", TextType.TEXT, None))
         self.assertEqual(new_nodes4[1], TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"))
         print(new_nodes4)
+        print("")
+    
+    def test_text_to_textnodes_all_node_types(self):
+        text_to_nodes_text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 10)
+        self.assertEqual(text_to_textnodes[0].text_type, TextType.TEXT)
+        self.assertEqual(text_to_textnodes[9].text_type, TextType.LINK)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_empty_arg(self):
+        text_to_nodes_text = ""    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 0)
+        print(text_to_textnodes)
+        print("")
+    
+    def test_text_to_textnodes_multiple_non_link_types(self):
+        text_to_nodes_text = "This is **text** with an _italic_ word"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(text_to_textnodes[1].text_type, TextType.BOLD)
+        self.assertEqual(text_to_textnodes[3].text_type, TextType.ITALIC)
+        self.assertEqual(text_to_textnodes[4].text_type, TextType.TEXT)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_one_non_link_type(self):
+        text_to_nodes_text = "This is **text**"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 2)
+        self.assertEqual(text_to_textnodes[1].text_type, TextType.BOLD)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_just_non_link_type(self):
+        text_to_nodes_text = "**text**"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 1)
+        self.assertEqual(text_to_textnodes[0].text_type, TextType.BOLD)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_link_types(self):
+        text_to_nodes_text = "A ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(text_to_textnodes[1].text_type, TextType.IMAGE)
+        self.assertEqual(text_to_textnodes[0].text_type, TextType.TEXT)
+        self.assertEqual(text_to_textnodes[3].text_type, TextType.LINK)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_link_type(self):
+        text_to_nodes_text = "A [link](https://boot.dev)"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 2)
+        self.assertEqual(text_to_textnodes[1].text_type, TextType.LINK)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_just_link(self):
+        text_to_nodes_text = "[link](https://boot.dev)"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 1)
+        self.assertEqual(text_to_textnodes[0].text_type, TextType.LINK)
+        print(text_to_textnodes)
+        print("")
+
+    def test_text_to_textnodes_just_text(self):
+        text_to_nodes_text = "This is"    
+        text_to_textnodes = NodeFunc.text_to_textnodes(text_to_nodes_text)
+        self.assertEqual(len(text_to_textnodes), 1)
+        self.assertEqual(text_to_textnodes[0].text_type, TextType.TEXT)
+        print(text_to_textnodes)
         print("")
 
 if __name__ == "__main__":

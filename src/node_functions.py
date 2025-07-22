@@ -9,9 +9,15 @@ class NodeFunc():
         for node in old_nodes:
             if node.text_type == TextType.TEXT and delimiter in node.text:
                 node_split = node.text.split(delimiter)
+                first_split = 0
+                if node_split[0] == "":
+                    first_split += 1
+                last_split = len(node_split)
+                if node_split[-1] == "":
+                    last_split -= 1
                 if len(node_split) % 2 == 0:
                     raise Exception(f"Missing terminating delimiter {delimiter}")
-                for i in range(0, len(node_split)):
+                for i in range(first_split, last_split):
                     if i % 2 != 0:
                         new_nodes.append(TextNode(node_split[i],text_type))
                     else:
@@ -46,12 +52,14 @@ class NodeFunc():
                         else:
                             prefix_text = split_text[0]
                             text_partition = split_text[1]
-                            new_text_node = TextNode(prefix_text, TextType.TEXT)
-                            new_nodes.append(new_text_node)
+                            if prefix_text != "":
+                                new_text_node = TextNode(prefix_text, TextType.TEXT)
+                                new_nodes.append(new_text_node)
                             new_image_node = TextNode(image[0],TextType.IMAGE,image[1])
                             new_nodes.append(new_image_node)
-                    tail_node = TextNode(text_partition, TextType.TEXT)
-                    new_nodes.append(tail_node)
+                    if text_partition != "":
+                        tail_node = TextNode(text_partition, TextType.TEXT)
+                        new_nodes.append(tail_node)
         return new_nodes
 
     def split_nodes_link(old_nodes):
@@ -72,21 +80,24 @@ class NodeFunc():
                         else:
                             prefix_text = split_text[0]
                             text_partition = split_text[1]
-                            new_text_node = TextNode(prefix_text, TextType.TEXT)
-                            new_nodes.append(new_text_node)
+                            if prefix_text != "":
+                                new_text_node = TextNode(prefix_text, TextType.TEXT)
+                                new_nodes.append(new_text_node)
                             new_link_node = TextNode(link[0],TextType.LINK,link[1])
                             new_nodes.append(new_link_node)
-                    tail_node = TextNode(text_partition, TextType.TEXT)
-                    new_nodes.append(tail_node)
+                    if text_partition != "":
+                        tail_node = TextNode(text_partition, TextType.TEXT)
+                        new_nodes.append(tail_node)
         return new_nodes
     
     def text_to_textnodes(text):
+        if text == "":
+            return []
         node = TextNode(text, TextType.TEXT)
         nodes = [node]
         nodes = NodeFunc.split_nodes_delimiter(nodes, "**", TextType.BOLD)
-        nodes = NodeFunc.split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+        nodes = NodeFunc.split_nodes_delimiter(nodes, "_", TextType.ITALIC)
         nodes = NodeFunc.split_nodes_delimiter(nodes, "`", TextType.CODE)
         nodes = NodeFunc.split_nodes_image(nodes)
         nodes = NodeFunc.split_nodes_link(nodes)
-        print(nodes)
         return nodes
