@@ -26,21 +26,17 @@ class BlockFunc():
             return BlockType.HEAD
         elif re.match(r"^```.+```$", block, re.DOTALL):
             return BlockType.CODE
-        elif re.match(r"^(?:>).*$(?:\n(?:>).*$)*", block, re.MULTILINE):
+        elif all(line.startswith('>') for line in block.splitlines()):
             return BlockType.QUOTE
-        elif re.match(r"(- .*){1,}", block, re.DOTALL):
-            ulist_split = block.split("\n")
-            '''for ulist in ulist_split:
-                if ulist[0:2] != "- ":
-                    return BlockType.PARA'''
+        elif re.fullmatch(r'(?:- .*\n?)+', block):
             return BlockType.ULIST
-        elif re.match(r"1. .*", block):
-            curr_num = 0
+        elif re.fullmatch(r'(?:\d+\. .*(?:\r?\n|$))+', block):
+            curr_num = 1
             olist_split = block.split("\n")
-            '''for olist in olist_split:
-                if olist[0] == curr_num + 1:
-                    curr_num = int(olist[0])
+            for olist in olist_split:
+                if olist[0] == curr_num:
+                    curr_num += 1
                 else:
-                    return BlockType.PARA'''
+                    return BlockType.PARA
             return BlockType.OLIST
         return BlockType.PARA
